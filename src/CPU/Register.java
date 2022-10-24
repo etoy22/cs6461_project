@@ -49,7 +49,7 @@ public class Register {
     }
 
     /**
-     * 
+     * Return name of Register
      * @return
      */
     public String getName() {

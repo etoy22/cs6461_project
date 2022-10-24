@@ -24,6 +24,9 @@ import javax.swing.JToggleButton;
  * 
  */
 public class CPU {
+    /*
+     * Setting Variables for the CPU class
+     */
     private final JPanel Frame;
     private final Memory memory;
     private final Cache cache;
@@ -123,9 +126,9 @@ public class CPU {
      */
     private void fetchInstruction() {
         this.MAR.setValue(this.PC.getValue());
-        if (this.cache.inCache(this.PC.getValue())) {
+        if (this.cache.inCache(this.PC.getValue())) { //Checks to see if value is in cache
             this.MBR.setValue(this.cache.getCacheAddress(this.PC.getValue()));
-        } else {
+        } else { 
             System.out.println("[INFO] [CPU] [FETCH] ADDRESS NOT IN CACHE");
             int data = this.memory.load(this.PC.getValue());
             this.MBR.setValue(data);
@@ -147,7 +150,8 @@ public class CPU {
     }
 
     /**
-     * 
+     * Step 3 of Instrcution Cycle
+     * Fetches the Operand to Use
      */
     private void fetchOperand() {
         this.IAR.setValue(this.memoryLocation);
@@ -166,7 +170,8 @@ public class CPU {
     }
 
     /**
-     * 
+     * Step 4 of Instrcution Cycle
+     * Execute the opCode found by fetchOperand
      */
     private void execute() {
         this.instructionSet.executeInstruction(opCode, this);
@@ -445,7 +450,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Iterates through the singlestep Instruction cycle until it reaches 2048 times
      */
     private void createRunThread() {
         this.runThread = new Thread("runThread"){
@@ -453,7 +458,7 @@ public class CPU {
             @Override
             public void run() {
                 while (true) {
-                    if (!CPU.this.isSimPaused) {
+                    if (!CPU.this.isSimPaused) {//Makes sure that the code isn't paused 
                         CPU.this.singleInstructionCycle();
                         if (CPU.this.PC.getValue() + 1 == 2048) break;
                     }
@@ -492,7 +497,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the Index Registers to the GUI
      */
     private void addIndexRegisters() {
         this.IXR1 = new Register("IXR1", 16, this.inputSwitches, true);
@@ -510,7 +515,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the PC to the GUI
      */
     private void addPC() {
         this.PC = new Register("PC", 12, this.inputSwitches, false);
@@ -521,7 +526,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the MAR to the GUI
      */
     private void addMAR() {
         this.MAR = new Register("MAR", 12, this.inputSwitches, false);
@@ -534,7 +539,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the MBR to the GUI
      */
     private void addMBR() {
         this.MBR = new Register("MBR", 16, this.inputSwitches, true);
@@ -544,7 +549,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the IR to the GUI
      */
     private void addIR() {
         this.IR = new Register("IR", 16, this.inputSwitches, false);
@@ -553,7 +558,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the MFR to the GUI
      */
     private void addMFR() {
         this.MFR = new Register("MFR", 4, this.inputSwitches, false);
@@ -562,7 +567,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the Run/Single Step/Halt Button to the GUI
      */
     private void addRunButtons() {
         this.stepButton = new JButton("Single Step");
@@ -570,16 +575,16 @@ public class CPU {
         this.haltButton = new JToggleButton("Halt");
         this.storeButton= new JButton("Store");
         this.loadButton=new JButton("Load");
+
         GUI.GUI.addComponent(this.stepButton, this.Frame, 1, 11, 1);
         GUI.GUI.addComponent(this.RunButton, this.Frame, 2, 11, 1);
         GUI.GUI.addComponent(this.haltButton, this.Frame, 3, 11, 1);
         GUI.GUI.addComponent(this.storeButton, this.Frame, 4, 11, 1);
         GUI.GUI.addComponent(this.loadButton, this.Frame, 5, 11, 1);
-
     }
 
     /**
-     * 
+     * Adds the Internal Registers to the GUI
      */
     private void addInternalRegisters() {
         this.IAR = new Register("IAR", 16, this.inputSwitches, true);
@@ -627,7 +632,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Adds the Current Instruction Display to the GUI
      */
     public void addCurrentInstructionDisplay() {
         this.currentInstructionDisplay = new JLabel("Current Instr: N/A");
@@ -635,7 +640,7 @@ public class CPU {
     }
 
     /**
-     * 
+     * Contains the action listeners for run/halt/single step
      */
     private void addListeners() {
         this.RunButton.addActionListener(ae -> {
@@ -684,6 +689,8 @@ public class CPU {
         
         
         
+        
+       
     }
 
     /**
@@ -708,6 +715,8 @@ public class CPU {
     public void updateCurrentInstructionDisplay() {
         this.currentInstructionDisplay.setText("Current Inst.: " + this.instructionSet.getInstructionName(opCode));
     }
+
+    //Getters and Setters bellow this point
 
     /**
      * 

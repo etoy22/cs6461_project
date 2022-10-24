@@ -34,6 +34,9 @@ public class InputSwitches {
         }
     }
 
+    /*
+     * Adds to switches to GUI
+     */
     private void addSwitches() {
         this.switchValue = "0".repeat(16);
         this.switches = new JToggleButton[16];
