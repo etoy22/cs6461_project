@@ -5,6 +5,8 @@ import GUI.InputSwitches;
 import Memory.Memory;
 import Memory.Cache;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,6 +49,7 @@ public class CPU {
     private Register RS1;   private JLabel RS1Val;
     
     private JButton RunButton;    private JButton stepButton; private JToggleButton haltButton;
+    private JButton storeButton; private JButton loadButton;
     private boolean isSimPaused = false;
 
     private DEVID outputDevice; private String outputRegister = "";
@@ -565,9 +568,14 @@ public class CPU {
         this.stepButton = new JButton("Single Step");
         this.RunButton = new JButton("Run");
         this.haltButton = new JToggleButton("Halt");
+        this.storeButton= new JButton("Store");
+        this.loadButton=new JButton("Load");
         GUI.GUI.addComponent(this.stepButton, this.Frame, 1, 11, 1);
         GUI.GUI.addComponent(this.RunButton, this.Frame, 2, 11, 1);
         GUI.GUI.addComponent(this.haltButton, this.Frame, 3, 11, 1);
+        GUI.GUI.addComponent(this.storeButton, this.Frame, 4, 11, 1);
+        GUI.GUI.addComponent(this.loadButton, this.Frame, 5, 11, 1);
+
     }
 
     /**
@@ -645,6 +653,37 @@ public class CPU {
             }
         });
         this.stepButton.addActionListener(e -> this.singleInstructionCycle());
+        this.storeButton.addActionListener
+        (new ActionListener() 
+        {
+			public void actionPerformed(ActionEvent e) 
+				{
+				int Value=MBR.getValue();
+				int Index=MAR.getValue();
+	            memory.store(Value, Index);
+	            }
+		}
+        );
+    
+        this.loadButton.addActionListener
+        (new ActionListener() 
+        {
+			public void actionPerformed(ActionEvent e) 
+			{
+				int index_marmemory=MAR.getValue();
+				System.out.println(index_marmemory);
+					int n5 = memory.load(index_marmemory);
+		            
+		            
+		            MBR.setValue(n5);
+				memory.load(index_marmemory);
+			}
+		});
+        
+        
+        
+        
+        
     }
 
     /**
