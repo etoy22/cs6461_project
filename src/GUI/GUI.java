@@ -3,6 +3,8 @@ package GUI;
 
 import CPU.CPU;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,6 +20,8 @@ public class GUI {
     private final JFrame frame = new JFrame("CSCI6461_CPU_Simulator");
     private final JPanel simulatorPanel;
     private JButton ipl;
+    
+
     private final Memory memory;
     private final CPU CPU;
     private final InputSwitches input;
@@ -69,7 +73,7 @@ public class GUI {
         this.ipl.addActionListener(ae -> this.initialProgramLoad());
         addComponent(this.ipl, this.simulatorPanel, 0, 11, 1);
     }
-
+   
     /**
      * IPL - Loading the Initial Program
      */
