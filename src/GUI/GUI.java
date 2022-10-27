@@ -81,7 +81,7 @@ public class GUI {
             if (programFile == null) {
                 programFile = "../programs/boot.txt";
             }
-            InputStream instream = getClass().getResourceAsStream(programFile);
+            InputStream instream = getClass().getResourceAsStream("../programs/"+programFile);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(instream));
 			String line;
