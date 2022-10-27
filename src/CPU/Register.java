@@ -6,25 +6,29 @@ import javax.swing.JTextField;
 import GUI.InputSwitches;
 
 /**
- * 
+ * Register Class for structure of all registers
  */
 public class Register {
+    // Standard for all registers
     private final String name;
     private final int length;
     private int value;
+    // Certain registers support negative numbers
     private final boolean signed;
+    // For displaying characters
     private boolean isChar;
+    // Standard for all registers
     private final JLabel label;
     private final JTextField textField;
     private final JButton loadButton;
     private final InputSwitches switches;
 
     /**
-     * 
-     * @param name
-     * @param length
-     * @param switches
-     * @param signedRegister
+     * Constructor - Sets name, value, length, etc.
+     * @param name Name of the register
+     * @param length Length of the bits the register can hold
+     * @param switches Switches for input into a register
+     * @param signedRegister Indicates whether the register created is signed or not
      */
     public Register(String name, int length, InputSwitches switches, boolean signedRegister) {
         this.name = name;        this.length = length;        this.switches = switches;        this.signed = signedRegister;
@@ -37,7 +41,7 @@ public class Register {
     }
 
     /**
-     * 
+     * Standard adding listener for the register
      */
     private void addListener() {
         this.loadButton.addActionListener(ae -> {
@@ -48,6 +52,11 @@ public class Register {
         });
     }
 
+
+    /* 
+     * GETTERS AND SETTERS SECTION
+     */
+
     /**
      * Return name of Register
      * @return
@@ -57,7 +66,7 @@ public class Register {
     }
 
     /**
-     * 
+     * Return the value of the register
      * @return
      */
     public int getValue() {
@@ -65,7 +74,7 @@ public class Register {
     }
 
     /**
-     * 
+     * Return the value of the register as a character
      * @return
      */
     public char getChar() {
@@ -73,7 +82,7 @@ public class Register {
     }
 
     /**
-     * 
+     * Sets the value of the register 
      * @param value
      */
     public void setValue(int value) {
@@ -84,7 +93,7 @@ public class Register {
     }
 
     /**
-     * 
+     * Sets the value of a register to a character
      * @param value
      */
     public void setValue(char value) {
@@ -92,29 +101,49 @@ public class Register {
         this.value = value;
     }
 
+    /**
+     * Gets the binary string of the register value
+     * @return
+     */
     public String getBinaryStringValue() {
         return this.textField.getText();
     }
 
+    /**
+     * Returns if the register holds character data or not
+     * @return
+     */
     public boolean isChar() {
         return this.isChar;
     }
 
+    /**
+     * Gets the label element of the register
+     * @return
+     */
     public JLabel getLabel() {
         return this.label;
     }
 
+    /**
+     * Gets the text field element of the register
+     * @return
+     */
     public JTextField getTextField() {
         return this.textField;
     }
 
     /**
-     * 
+     * Gets the load button connected to the register
      */
     public JButton getLoadButton() {
         return this.loadButton;
     }
 
+    /**
+     * Gets the length of the register
+     * @return
+     */
     public int getLength() {
         return this.length;
     }

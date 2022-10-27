@@ -3,8 +3,6 @@ package GUI;
 
 import CPU.CPU;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -81,7 +79,7 @@ public class GUI {
         try {
             String programFile = JOptionPane.showInputDialog(null, "Please Enter Program Name: ");
             if (programFile == null) {
-                programFile = "boot.txt";
+                programFile = "../programs/boot.txt";
             }
             InputStream instream = getClass().getResourceAsStream(programFile);
 
@@ -99,7 +97,7 @@ public class GUI {
         }
         catch (Exception e) {
             String error = "There was an error loading the IPL file";
-            JOptionPane.showMessageDialog(this.frame, error, "Error", 1);
+            JOptionPane.showMessageDialog(this.frame, e.toString(), "Error", 1);
         }
     }
 

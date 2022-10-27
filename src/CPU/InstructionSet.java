@@ -43,7 +43,7 @@ public class InstructionSet {
     };
 
     /**
-     * 
+     * Gets the string of the instruction from the op code
      * @param opcode
      * @return
      */
@@ -55,7 +55,7 @@ public class InstructionSet {
     }
 
     /**
-     * 
+     * Decodes the op code and decodes the instruction as needed
      * @param opcode
      * @param cpu
      */
@@ -65,34 +65,34 @@ public class InstructionSet {
         System.out.println(this.instructionList[opcode]);
 
         switch (opcode) {
-            case 0: decodeHalt(cpu); break;
-            case 1: decodeLDR(cpu);  break;
-            case 2: decodeSTR(cpu);  break;
-            case 3: decodeLDA(cpu);  break;
-            case 4: decodeAMR(cpu);  break;
-            case 5: decodeSMR(cpu);  break;
-            case 6: decodeAIR(cpu);  break;
-            case 7: decodeSIR(cpu);  break;
-            case 8: decodeJZ(cpu);   break;
-            case 9: decodeJNE(cpu);  break;
-            case 10: decodeJCC(cpu); break;
-            case 11: decodeJMA(cpu); break;
-            case 12: decodeJSR(cpu); break;
-            case 13: decodeRFS(cpu); break;
-            case 14: decodeSOB(cpu); break;
-            case 15: decodeJGE(cpu); break;
-            case 16: decodeMLT(cpu); break;
-            case 17: decodeDVD(cpu); break;
-            case 18: decodeTRR(cpu); break;
-            case 19: decodeAND(cpu); break;
-            case 20: decodeORR(cpu); break;
-            case 21: decodeNOT(cpu); break;
-            case 25: decodeSRC(cpu); break;
-            case 26: decodeRRC(cpu); break;
-            case 33: decodeLDX(cpu); break;
-            case 34: decodeSTX(cpu); break;
-            case 49: decodeIN(cpu);  break;
-            case 50: decodeOUT(cpu); break;
+            case 0:  decodeHalt(cpu); break;
+            case 1:  decodeLDR(cpu);  break;
+            case 2:  decodeSTR(cpu);  break;
+            case 3:  decodeLDA(cpu);  break;
+            case 4:  decodeAMR(cpu);  break;
+            case 5:  decodeSMR(cpu);  break;
+            case 6:  decodeAIR(cpu);  break;
+            case 7:  decodeSIR(cpu);  break;
+            case 8:  decodeJZ(cpu);   break;
+            case 9:  decodeJNE(cpu);  break;
+            case 10: decodeJCC(cpu);  break;
+            case 11: decodeJMA(cpu);  break;
+            case 12: decodeJSR(cpu);  break;
+            case 13: decodeRFS(cpu);  break;
+            case 14: decodeSOB(cpu);  break;
+            case 15: decodeJGE(cpu);  break;
+            case 16: decodeMLT(cpu);  break;
+            case 17: decodeDVD(cpu);  break;
+            case 18: decodeTRR(cpu);  break;
+            case 19: decodeAND(cpu);  break;
+            case 20: decodeORR(cpu);  break;
+            case 21: decodeNOT(cpu);  break;
+            case 25: decodeSRC(cpu);  break;
+            case 26: decodeRRC(cpu);  break;
+            case 33: decodeLDX(cpu);  break;
+            case 34: decodeSTX(cpu);  break;
+            case 49: decodeIN(cpu);   break;
+            case 50: decodeOUT(cpu);  break;
             default:
                 System.out.println("[ERROR] [INSTRUCTION] INVALID OP CODE :: " + opcode);
                 break;
@@ -101,7 +101,7 @@ public class InstructionSet {
     }
 
     /**
-     * 
+     * Executes the operation from the given op code
      * @param opcode
      * @param cpu
      */
@@ -111,16 +111,16 @@ public class InstructionSet {
         System.out.println(this.instructionList[opcode]);
 
         switch (opcode) {
-            case 0: executeHalt(cpu); break;
-            case 1: executeLDR(cpu);  break;
-            case 2: executeSTR(cpu);  break;
-            case 3: executeLDA(cpu);  break;
-            case 4: executeAMR(cpu);  break;
-            case 5: executeSMR(cpu);  break;
-            case 6: executeAIR(cpu);  break;
-            case 7: executeSIR(cpu);  break;
-            case 8: executeJZ(cpu);   break;
-            case 9: executeJNE(cpu);  break;
+            case 0:  executeHalt(cpu); break;
+            case 1:  executeLDR(cpu);  break;
+            case 2:  executeSTR(cpu);  break;
+            case 3:  executeLDA(cpu);  break;
+            case 4:  executeAMR(cpu);  break;
+            case 5:  executeSMR(cpu);  break;
+            case 6:  executeAIR(cpu);  break;
+            case 7:  executeSIR(cpu);  break;
+            case 8:  executeJZ(cpu);   break;
+            case 9:  executeJNE(cpu);  break;
             case 10: executeJCC(cpu); break;
             case 11: executeJMA(cpu); break;
             case 12: executeJSR(cpu); break;
@@ -147,7 +147,7 @@ public class InstructionSet {
 
     // 00
     /**
-     * HALT
+     * HALT OPERATION
      * @param cpu
      */
     private void decodeHalt(CPU cpu) {
@@ -155,12 +155,12 @@ public class InstructionSet {
     }
 
     private void executeHalt(CPU cpu) {
-        return;
+        cpu.setHalted(true);
     }
 
     // 01
     /**
-     * 
+     * LDR OPERATION
      * @param cpu
      */
     private void decodeLDR(CPU cpu) {
@@ -174,7 +174,7 @@ public class InstructionSet {
 
     // 02
     /**
-     * 
+     * STR OPERATION
      * @param cpu
      */
     private void decodeSTR(CPU cpu) {
@@ -189,7 +189,7 @@ public class InstructionSet {
 
     // 03
     /**
-     * 
+     * LDA OPERATION
      * @param cpu
      */
     private void decodeLDA(CPU cpu) {
@@ -203,7 +203,7 @@ public class InstructionSet {
 
     // 04
     /**
-     * 
+     * AMR OPERATION
      * @param cpu
      */
     private void decodeAMR(CPU cpu) {
@@ -219,7 +219,7 @@ public class InstructionSet {
 
     // 05
     /**
-     * 
+     * SMR OPERATION
      * @param cpu
      */
     private void decodeSMR(CPU cpu) {
@@ -235,7 +235,7 @@ public class InstructionSet {
 
     // 06
     /**
-     * 
+     * AIR OPERATION
      * @param cpu
      */
     private void decodeAIR(CPU cpu) {
@@ -251,7 +251,7 @@ public class InstructionSet {
 
     // 07
     /**
-     * 
+     * SIR OPERATION
      * @param cpu
      */
     private void decodeSIR(CPU cpu) {
@@ -267,10 +267,11 @@ public class InstructionSet {
 
     // 08
     /**
-     * 
+     * JZ OPERATION
      * @param cpu
      */
     private void decodeJZ(CPU cpu) {
+        return;
     }
 
     private void executeJZ(CPU cpu) {
@@ -282,10 +283,11 @@ public class InstructionSet {
 
     // 09
     /**
-     * 
+     * JNE OPERATION
      * @param cpu
      */
     private void decodeJNE(CPU cpu) {
+        return;
     }
 
     private void executeJNE(CPU cpu) {
@@ -297,10 +299,11 @@ public class InstructionSet {
 
     // 10
     /**
-     * 
+     * JCC OPERATION
      * @param cpu
      */
     private void decodeJCC(CPU cpu) {
+        return;
     }
 
     private void executeJCC(CPU cpu) {
@@ -311,10 +314,11 @@ public class InstructionSet {
 
     // 11
     /**
-     * 
+     * JMA OPERATION
      * @param cpu
      */
     private void decodeJMA(CPU cpu) {
+        return;
     }
 
     private void executeJMA(CPU cpu) {
@@ -323,7 +327,7 @@ public class InstructionSet {
 
     // 12
     /**
-     * 
+     * JSR OPERATION
      * @param cpu
      */
     private void decodeJSR(CPU cpu) {
@@ -339,7 +343,7 @@ public class InstructionSet {
 
     // 13
     /**
-     * 
+     * RFS OPERATION
      * @param cpu
      */
     private void decodeRFS(CPU cpu) {
@@ -357,7 +361,7 @@ public class InstructionSet {
 
     // 14
     /**
-     * 
+     * SOB OPERATION
      * @param cpu
      */
     private void decodeSOB(CPU cpu) {
@@ -373,10 +377,11 @@ public class InstructionSet {
 
     // 15
     /**
-     * 
+     * JGE OPERATION
      * @param cpu
      */
     private void decodeJGE(CPU cpu) {
+        return;
     }
 
     private void executeJGE(CPU cpu) {
@@ -388,10 +393,11 @@ public class InstructionSet {
 
     // 16
     /**
-     * 
+     * MLT COMMAND
      * @param cpu
      */
     private void decodeMLT(CPU cpu) {
+        return;
     }
 
     private void executeMLT(CPU cpu) {
@@ -412,10 +418,11 @@ public class InstructionSet {
 
     // 17
     /**
-     * 
+     * DVD OPERATION
      * @param cpu
      */
     private void decodeDVD(CPU cpu) {
+        return;
     }
 
     private void executeDVD(CPU cpu) {
@@ -436,10 +443,11 @@ public class InstructionSet {
 
     // 18
     /**
-     * 
+     * TRR OPERATION
      * @param cpu
      */
     private void decodeTRR(CPU cpu) {
+        return;
     }
 
     private void executeTRR(CPU cpu) {
@@ -448,14 +456,16 @@ public class InstructionSet {
         cpu.getALU().testEquality(rx, ry);
     }
 
-    private void decodeAND(CPU cpu) {
-    }
 
     // 19
     /**
-     * 
+     * AND OPERATION
      * @param cpu
      */
+    private void decodeAND(CPU cpu) {
+        return;
+    }
+
     private void executeAND(CPU cpu) {
         Register rx = cpu.getRX();
         Register ry = cpu.getRY();
@@ -464,10 +474,11 @@ public class InstructionSet {
 
     // 20
     /**
-     * 
+     * ORR OPERATION
      * @param cpu
      */
     private void decodeORR(CPU cpu) {
+        return;
     }
 
     private void executeORR(CPU cpu) {
@@ -478,10 +489,11 @@ public class InstructionSet {
 
     // 21
     /**
-     * 
+     * NOT OPERATION
      * @param cpu
      */
     private void decodeNOT(CPU cpu) {
+        return;
     }
 
     private void executeNOT(CPU cpu) {
@@ -493,7 +505,7 @@ public class InstructionSet {
 
     // 25
     /**
-     * 
+     * SRC OPERATION
      * @param cpu
      */
     private void decodeSRC(CPU cpu) {
@@ -512,10 +524,11 @@ public class InstructionSet {
 
     // 26
     /**
-     * 
+     * RRC OPERATION
      * @param cpu
      */
     private void decodeRRC(CPU cpu) {
+        return;
     }
 
     private void executeRRC(CPU cpu) {
@@ -545,7 +558,7 @@ public class InstructionSet {
 
     // 33
     /**
-     * 
+     * LDX OPERATION
      * @param cpu
      */
     private void decodeLDX(CPU cpu) {
@@ -564,7 +577,7 @@ public class InstructionSet {
 
     // 34
     /**
-     * 
+     * STX OPERATION
      * @param cpu
      */
     private void decodeSTX(CPU cpu) {
@@ -584,7 +597,7 @@ public class InstructionSet {
 
     // 49
     /**
-     * 
+     * IN OPERATION
      * @param cpu
      */
     private void decodeIN(CPU cpu) {
@@ -602,7 +615,7 @@ public class InstructionSet {
 
     // 50
     /**
-     * 
+     * OUT OPERATION
      * @param cpu
      */
     private void decodeOUT(CPU cpu) {

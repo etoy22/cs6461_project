@@ -38,6 +38,9 @@ public class CPU {
     private JTextField keyboard;
     private Thread runThread;
 
+    /*
+     * Register Variables
+     */
     private int curGPR;
     private Register GPR0;  private Register GPR1;  private Register GPR2;  private Register GPR3;
     private int curIXR;
@@ -51,6 +54,9 @@ public class CPU {
     private Register IRR;   private JLabel IRRVal;
     private Register RS1;   private JLabel RS1Val;
     
+    /*
+     * Buttons for the GUI
+     */
     private JButton RunButton;    private JButton stepButton; private JToggleButton haltButton;
     private JButton storeButton; private JButton loadButton;
     private boolean isSimPaused = false;
@@ -368,7 +374,7 @@ public class CPU {
 
         try {
             String line;
-            InputStream instream = this.getClass().getResourceAsStream("boot.txt");
+            InputStream instream = this.getClass().getResourceAsStream("../programs/boot.txt");
             if (instream == null) {
                 System.out.println("[ERROR] [CPU] [BOOT] Unable to get File boot.txt");
                 return;
@@ -447,27 +453,27 @@ public class CPU {
         this.haltButton.setSelected(isHalted);
         this.RunButton.setEnabled(!isHalted);
         this.stepButton.setEnabled(!isHalted);
+        this.isSimPaused = true;
     }
 
     /**
-     * Iterates through the singlestep Instruction cycle until it reaches 2048 times
+     * Iterates through the singlestep Instruction cycle until it reaches the end
      */
     private void createRunThread() {
         this.runThread = new Thread("runThread"){
-
             @Override
             public void run() {
                 while (true) {
-                    if (!CPU.this.isSimPaused) {//Makes sure that the code isn't paused 
-                        CPU.this.singleInstructionCycle();
-                        if (CPU.this.PC.getValue() + 1 == 2048) break;
-                    }
-                    try {
-                        Thread.sleep(50L);
-                    }
-                    catch (InterruptedException ex) {
-                        System.out.println("Critical error when machine is halted: " + ex.getMessage());
-                        break;
+                    if (!CPU.this.isSimPaused) {
+                        singleInstructionCycle();
+                        if (CPU.this.PC.getValue() + 1 == 2048) { break; }
+                    } else {
+                        if (CPU.this.PC.getValue() != CPU.this.nextPc) {
+                            CPU.this.nextPc = CPU.this.PC.getValue() + 1;
+                        }
+                        try {
+                            sleep(10);
+                        } catch (java.lang.InterruptedException ignored) {}
                     }
                 }
             }
