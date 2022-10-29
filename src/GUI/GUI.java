@@ -79,9 +79,9 @@ public class GUI {
         try {
             String programFile = JOptionPane.showInputDialog(null, "Please Enter Program Name: ");
             if (programFile == null) {
-                programFile = "../programs/boot.txt";
+                programFile = "boot.txt";
             }
-            InputStream instream = getClass().getResourceAsStream("../programs/"+programFile);
+            InputStream instream = getClass().getResourceAsStream(programFile);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(instream));
 			String line;
