@@ -30,7 +30,8 @@ public class InstructionSet {
             "AND",
             "ORR",
             "NOT",
-            "N/A", "N/A", "N/A",
+            "N/A", "N/A", 
+            "TRAP",
             "SRC",
             "RRC",
             "N/A", "N/A", "N/A", "N/A", "N/A", "N/A",
@@ -61,8 +62,7 @@ public class InstructionSet {
      */
     public void decodeInstruction(int opcode, CPU cpu) {
 
-        System.out.print("Decode Instruction :: " + opcode + " :: ");
-        System.out.println(this.instructionList[opcode]);
+        cpu.printToConsole("Decode Instruction :: " + opcode + " :: " + this.instructionList[opcode]);
 
         switch (opcode) {
             case 0:  decodeHalt(cpu); break;
@@ -94,7 +94,7 @@ public class InstructionSet {
             case 49: decodeIN(cpu);   break;
             case 50: decodeOUT(cpu);  break;
             default:
-                System.out.println("[ERROR] [INSTRUCTION] INVALID OP CODE :: " + opcode);
+                cpu.printToConsole("[ERROR] [INSTRUCTION] INVALID OP CODE :: " + opcode);
                 break;
         }
         return;
@@ -107,8 +107,7 @@ public class InstructionSet {
      */
     public void executeInstruction(int opcode, CPU cpu) {
 
-        System.out.print("Executing Instruction :: " + opcode + " :: ");
-        System.out.println(this.instructionList[opcode]);
+        cpu.printToConsole("Executing Instruction :: " + opcode + " :: " + this.instructionList[opcode]);
 
         switch (opcode) {
             case 0:  executeHalt(cpu); break;
@@ -140,7 +139,7 @@ public class InstructionSet {
             case 49: executeIN(cpu);  break;
             case 50: executeOUT(cpu); break;
             default:
-                System.out.println("[ERROR] [INSTRUCTION] INVALID OP CODE :: " + opcode);
+                cpu.printToConsole("[ERROR] [INSTRUCTION] INVALID OP CODE :: " + opcode);
             }
 
         }
@@ -215,6 +214,7 @@ public class InstructionSet {
         Register r = cpu.selectGPR(cpu.getRs1().getValue());
         int valToAdd = cpu.getMemory().load(cpu.getIar().getValue());
         cpu.getALU().add(cpu.getIrr(), r, valToAdd);
+        cpu.printToConsole("Result of add: "+cpu.getIrr().getValue());
     }
 
     // 05
@@ -247,6 +247,7 @@ public class InstructionSet {
     private void executeAIR(CPU cpu) {
         Register r = cpu.selectGPR(cpu.getRs1().getValue());
         cpu.getALU().add(cpu.getIrr(), r, cpu.getIar().getValue());
+        cpu.printToConsole("Result of add: "+cpu.getIrr().getValue());
     }
 
     // 07
@@ -263,6 +264,7 @@ public class InstructionSet {
     private void executeSIR(CPU cpu) {
         Register r = cpu.selectGPR(cpu.getRs1().getValue());
         cpu.getALU().sub(cpu.getIrr(), r, cpu.getIar().getValue());
+        cpu.printToConsole("Result of subtract: "+cpu.getIrr().getValue());
     }
 
     // 08
@@ -406,11 +408,11 @@ public class InstructionSet {
         int rxNum = cpu.getCurGPR();
         int ryNum = cpu.getCurIXR();
         if (rxNum != 0 && rxNum != 2) {
-            System.out.println("[ERROR] [INST] Invalid rx register for MLT. Expected 0, 2 but got " + rxNum);
+            cpu.printToConsole("[ERROR] [INST] Invalid rx register for MLT. Expected 0, 2 but got " + rxNum);
             return;
         }
         if (ryNum != 0 && ryNum != 2) {
-            System.out.println("[ERROR] [INST] Invalid ry register for MLT. Expected 0, 2 but got " + ryNum);
+            cpu.printToConsole("[ERROR] [INST] Invalid ry register for MLT. Expected 0, 2 but got " + ryNum);
             return;
         }
         cpu.getALU().multiply(rx, ry, cpu.selectGPR(rxNum + 1));
@@ -431,14 +433,16 @@ public class InstructionSet {
         int rxNum = cpu.getCurGPR();
         int ryNum = cpu.getCurIXR();
         if (rxNum != 0 && rxNum != 2) {
-            System.out.println("[ERROR] [INST] Invalid rx register for DVD. Expected 0, 2 but got " + rxNum);
+            cpu.printToConsole("[ERROR] [INST] Invalid rx register for DVD. Expected 0, 2 but got " + rxNum);
             return;
         }
         if (ryNum != 0 && ryNum != 2) {
-            System.out.println("[ERROR] [INST] Invalid ry register for DVD. Expected 0, 2 but got " + ryNum);
+            cpu.printToConsole("[ERROR] [INST] Invalid ry register for DVD. Expected 0, 2 but got " + ryNum);
             return;
         }
         cpu.getALU().divide(rx, ry, cpu.selectGPR(rxNum + 1));
+        System.out.println("Quotient of divide: " + rx.getValue());
+        System.out.println("Remainder of divide: " + cpu.selectGPR(rxNum + 1));
     }
 
     // 18
@@ -502,6 +506,23 @@ public class InstructionSet {
     }
 
     // 24 TRAP (P3)
+    /**
+     * TRAP Operation
+     * @param cpu
+     */
+
+    private void decodeTRAP(CPU cpu) {
+        return;
+    }
+
+    private void executeTRAP(CPU cpu) {
+
+        //Traps to memory address 0
+        cpu.getMemory().store(cpu.getMAR().getValue(), 0);
+        //Stores the PC+1 in memory location 2
+        cpu.getMemory().store(cpu.getPC().getValue()+1, 2);
+        
+    }
 
     // 25
     /**
@@ -519,6 +540,7 @@ public class InstructionSet {
         int LR = cpu.getRotate();
         int AL = cpu.getShift();
         int result = cpu.getALU().shift(r, count, LR, AL);
+        cpu.printToConsole("Shift result: " + result);
         cpu.getIrr().setValue(result);
     }
 
@@ -564,7 +586,7 @@ public class InstructionSet {
     private void decodeLDX(CPU cpu) {
         int ixVal = cpu.getCurIXR();
         if (ixVal == 0) {
-            System.out.println("[ERROR] [INST] [LDX] [FAULT] Fault: LDX Missing IXR");
+            cpu.printToConsole("[ERROR] [INST] [LDX] [FAULT] Fault: LDX Missing IXR");
         }
         cpu.getRs1().setValue(ixVal);
         cpu.setDeviceOutput(DEVID.REGISTER);
@@ -583,7 +605,7 @@ public class InstructionSet {
     private void decodeSTX(CPU cpu) {
         int ixVal = cpu.getCurIXR();
         if (ixVal == 0) {
-            System.out.println("Fault: no index register specified in LDX");
+            cpu.printToConsole("Fault: no index register specified in LDX");
         }
         cpu.getRs1().setValue(ixVal);
         cpu.setDeviceOutput(DEVID.MEMORY);
@@ -609,7 +631,7 @@ public class InstructionSet {
         if (devId == DEVID.KEYBOARD.getId()) {
             cpu.getKeyboardInput();
         } else if (devId != DEVID.CARD_READER.getId()) {
-            System.out.println("[ERROR] [INST] Invalid devid for IN instruction");
+            cpu.printToConsole("[ERROR] [INST] Invalid devid for IN instruction");
         }
     }
 
@@ -627,7 +649,7 @@ public class InstructionSet {
         if (devId == DEVID.PRINTER.getId()) {
             cpu.printToConsole(cpu.selectGPR(cpu.getRs1().getValue()));
         } else {
-            System.out.println("[ERROR] [INST] Invalid devid for IN instruction");
+            cpu.printToConsole("[ERROR] [INST] Invalid devid for IN instruction");
         }
     }
 

@@ -135,7 +135,7 @@ public class CPU {
         if (this.cache.inCache(this.PC.getValue())) { //Checks to see if value is in cache
             this.MBR.setValue(this.cache.getCacheAddress(this.PC.getValue()));
         } else { 
-            System.out.println("[INFO] [CPU] [FETCH] ADDRESS NOT IN CACHE");
+            printToConsole("[INFO] [CPU] [FETCH] ADDRESS NOT IN CACHE");
             int data = this.memory.load(this.PC.getValue());
             this.MBR.setValue(data);
         }
@@ -164,10 +164,10 @@ public class CPU {
         if (this.useIxi) {
             if (!this.outputRegister.equals("IXR") && this.curIXR != 0) {
                 this.IAR.setValue(this.IAR.getValue() + this.selectIXR(this.curIXR).getValue());
-                System.out.println("Iar after indexing: " + this.IAR.getValue());
+                printToConsole("Iar after indexing: " + this.IAR.getValue());
             }
             if (this.indirectBit == 1) {
-                System.out.println("Indirect addressing");
+                printToConsole("Indirect addressing");
                 this.IAR.setValue(this.memory.load(this.IAR.getValue()));
             }
         }
@@ -188,19 +188,19 @@ public class CPU {
      */
     private void writeResults() {
         if (this.outputDevice.getId() == DEVID.REGISTER.getId()) {
-            System.out.println("Loading value " + this.IRR.getValue() + " into " + this.outputRegister + this.RS1.getValue());
+            printToConsole("Loading value " + this.IRR.getValue() + " into " + this.outputRegister + this.RS1.getValue());
             if (this.outputRegister.equals("GPR")) {
                 Register r = this.selectGPR(this.RS1.getValue());
                 r.setValue(this.IRR.getValue());
-                System.out.println("Storing value " + this.IRR.getValue() + " into register " + r.getName());
+                printToConsole("Storing value " + this.IRR.getValue() + " into register " + r.getName());
             } else if (this.outputRegister.equals("IXR")) {
                 Register r = this.selectIXR(this.RS1.getValue());
                 r.setValue(this.IRR.getValue());
-                System.out.println("Storing value " + this.IRR.getValue() + " into register " + r.getName());
+                printToConsole("Storing value " + this.IRR.getValue() + " into register " + r.getName());
             }
         } else if (this.outputDevice.getId() == DEVID.MEMORY.getId()) {
             this.MBR.setValue(this.IRR.getValue());
-            System.out.println("Storing value " + this.MBR.getValue() + " from register into memory location " + this.MAR.getValue());
+            printToConsole("Storing value " + this.MBR.getValue() + " from register into memory location " + this.MAR.getValue());
             if (this.opCode != 2 && this.opCode != 34) {
                 this.cache.insertAddress(this.MBR.getValue(), this.MAR.getValue(), this.memory);
             } else {
@@ -214,7 +214,8 @@ public class CPU {
      */
     private void nextInstruction() {
         this.PC.setValue(this.nextPc);
-        System.out.println("PC: " + this.PC.getValue());
+        printToConsole("PC: " + this.PC.getValue());
+        printToConsole("");
     }
 
     /**
@@ -370,13 +371,13 @@ public class CPU {
      * 
      */
     private void loadBootProgram() {
-        System.out.println("[INFO] [CPU] [BOOT] Loading Boot Program.");
+        printToConsole("[INFO] [CPU] [BOOT] Loading Boot Program.");
 
         try {
             String line;
             InputStream instream = this.getClass().getResourceAsStream("../programs/boot.txt");
             if (instream == null) {
-                System.out.println("[ERROR] [CPU] [BOOT] Unable to get File boot.txt");
+                printToConsole("[ERROR] [CPU] [BOOT] Unable to get File boot.txt");
                 return;
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(instream));
@@ -384,18 +385,18 @@ public class CPU {
                 String[] instr = line.split("\\s+");
                 int new_location = this.memory.convertHextoDec(instr[0]);
                 int new_value = this.memory.convertHextoDec(instr[1]);
-                System.out.println(new_value + " :: Stored :: " + new_location);
+                printToConsole(new_value + " :: Stored :: " + new_location);
                 this.memory.store(new_value, new_location);
             }
-            System.out.println("[INFO] [CPU] [BOOT] Boot Program loaded.");
+            printToConsole("[INFO] [CPU] [BOOT] Boot Program loaded.");
         }
         catch (Exception e) {
-            System.out.println("[ERROR] [CPU] [BOOT] Unable to load boot program :: " + e.getMessage());
+            printToConsole("[ERROR] [CPU] [BOOT] Unable to load boot program :: " + e.getMessage());
         }
     }
 
     /**
-     * 
+     * Print Register to Console
      */
     public void printToConsole(Register r) {
         if (this.runningBoot || r.isChar()) {
@@ -403,6 +404,10 @@ public class CPU {
         } else {
             this.printer.append(r.getValue() + " \n");
         }
+    }
+
+    public void printToConsole(String s) {
+        this.printer.append(s + " \n");
     }
 
     /**
@@ -424,22 +429,22 @@ public class CPU {
                 if (!((double)inputNumber > Math.pow(2.0, r.getLength()))) {
                     r.setValue(inputNumber);
                     this.keyboard.setText("" + inputNumber);
-                    System.out.println("[INFO] [CPU] [INPUT] Register " + r.getName() + " loaded with value " + inputNumber);
+                    printToConsole("[INFO] [CPU] [INPUT] Register " + r.getName() + " loaded with value " + inputNumber);
                     return;
                 }
                 JOptionPane.showMessageDialog(this.Frame, "Hold on there, that number is too large for the Simulator!");
-                System.out.println("[ERROR] [CPU] [INPUT] User entered a number that was too large for the simulator");
+                printToConsole("[ERROR] [CPU] [INPUT] User entered a number that was too large for the simulator");
                 isInputLarge = true;
             }
             catch (NumberFormatException e) {
-                System.out.println("[ERROR] [CPU] [INPUT] Exception reading User Input: " + e.getMessage());
+                printToConsole("[ERROR] [CPU] [INPUT] Exception reading User Input: " + e.getMessage());
             }
             if (isInputLarge) continue;
             if (input.length() == 1) {
                 char c = input.charAt(0);
                 r.setValue(c);
                 this.keyboard.setText("" + c);
-                System.out.println("[INFO] [CPU] [INPUT] " + r.getName() + " Loaded with  " + c);
+                printToConsole("[INFO] [CPU] [INPUT] " + r.getName() + " Loaded with  " + c);
                 return;
             }
             JOptionPane.showMessageDialog(this.Frame, "Input must be a valid number");
@@ -682,7 +687,7 @@ public class CPU {
 			public void actionPerformed(ActionEvent e) 
 			{
 				int index_marmemory=MAR.getValue();
-				System.out.println(index_marmemory);
+				printToConsole(""+index_marmemory);
 					int n5 = memory.load(index_marmemory);
 		            
 		            
@@ -731,6 +736,15 @@ public class CPU {
     public Register getMbr() {
         return this.MBR;
     }
+
+    /**
+     * 
+     * @return
+     */
+    public Register getMAR() {
+        return this.MAR;
+    }
+
 
     /**
      * 

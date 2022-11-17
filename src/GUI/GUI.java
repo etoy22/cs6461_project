@@ -90,7 +90,7 @@ public class GUI {
 				String[] instr = line.split("\\s+");
 				int index = Integer.parseInt(instr[0],16);
 				int new_value = Integer.parseInt(instr[1],16);
-				System.out.println(new_value + " inserted into memory location " + index);
+				CPU.printToConsole(new_value + " inserted into memory location " + index);
 				memory.store(new_value, index);
 			}
 

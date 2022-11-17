@@ -19,7 +19,7 @@ public class ALU {
         } else if (in.getValue() < 0 && value < 0) {
             this.condCode[1] = 1;
         }
-        System.out.println("Result of add: " + out.getValue());
+        // System.out.println("Result of add: " + out.getValue());
     }
 
     public void sub(Register out, Register in, int value) {
@@ -31,7 +31,7 @@ public class ALU {
         } else if (in.getValue() < 0 && value > 0) {
             this.condCode[1] = 1;
         }
-        System.out.println("Result of add: " + out.getValue());
+        // System.out.println("Result of sub: " + out.getValue());
     }
 
     public void multiply(Register rx, Register ry, Register rxPlusOne) {
@@ -184,7 +184,7 @@ public class ALU {
                 this.condCode[1] = 1;
             }
         }
-        System.out.println("Shift result: " + result);
+        // System.out.println("Shift result: " + result);
         return getIntValue(result);
     }
 
